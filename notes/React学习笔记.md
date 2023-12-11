@@ -18,7 +18,7 @@ React的运作机制简单说：
 * 在浏览器端，在一个近乎空白的HTML上用JavaScript画出所有的DOM，这个过程称为渲染（Render）
 * 在服务器端，用Node.js安装/管理/运行React的各种组成模块，包括Http服务、Sass服务、JSX编译器等
 
-React一般使用JSX语法，JSX语法在浏览器编译成JS之后再运行渲染。所以React多被称为前段渲染。
+React一般使用JSX语法，JSX语法在浏览器编译成JS之后再运行渲染。所以React多被称为前端渲染。
 ```HTML
 //在HTML里面使用，引入react 3个主要的js。
 //React-dom是虚拟dom
@@ -43,20 +43,20 @@ import ReactDOM from "react-dom";
 const myReactApp = <p>JSX的HTML标签作为变量给React渲染</p>; //纯JSX
 const myElement = React.creatElement('h1', {}, 'donot use JSX');  //React元素
 
-const componentApp = () => {     //组件
+const ComponentApp = () => {     //组件
     return <p>函数形态的组件，返回HTML标签</p>
 }
 
 const container = document.getElementById("whateverLikeRoot");
 const root = ReactDOM.createRoot(container);
 root.render(myReactApp);
-root.render(myElement);
-root.render(<componentApp />);
+//root.render(myElement);
+//root.render(<ComponentApp />);
 ```
 
 换句话说，浏览器里看到的页面是React在浏览器的虚拟环境下“画”出来的结果，`ReactDOM.createRoot()` 就是在创建一个虚拟的DOM。每当虚拟环境下的内容改变时，浏览器就重新“画”一次。从MVC模式看，浏览器的画面是内存虚拟环境里各个JS“对象”的V，内存里还有对象本身M以及控制逻辑C
 
-# 1. ES6 中的常用语法
+# 1. React的准备：ES6 中的常用语法
 ECMAscript6 发布于2016，是JavaScript最新标准版本。React经常使用的ES6语法知识点包括：
 * Classes
 * Arrow Functions
@@ -235,9 +235,9 @@ ECMAscript6 发布于2016，是JavaScript最新标准版本。React经常使用�
     > (boolean)? {then} : {otherwise};
 
 
-# 2. JSX 常用语法
+# 2. React的准备：JSX 常用语法
 JSX = JavaScript XML，是XML语法。   
-React支持JSX，使React的语句更简洁，在本文最开始的React简介中就有过简单的例子。
+React支持JSX，无论是直接渲染JSX还是渲染组件Component，都可以用JSX编译成HTML。使React的语句更简洁，在本文最开始的React简介中就有过简单的例子。
 JSX编译时可以把HTML标签转变成React的Element和DOM，从而无需自己写 `React.creatElement()` 和 `.appendChild()`  
 
 
@@ -292,6 +292,114 @@ function Artical(){ //大写字母开头，表示这是一个对象
     return <p>This is the Artical body</p>;
 }
 ```
+如果把Component比作Function，那组件的 Props 就像是函数的 Arguments。
+> Example
+>
+> ```javascript
+> function Artical(props){ //props 是参数集对象 
+>     return <p>This is a {props.color} Artical body</p>;
+> }
+> 
+> const rt = ReactDOM.createRoot(document.getElementById('root'));
+> rt.render(<Artical color='Blue'>);
+> ```
+> 
 
 
-## 3.1 Class
+组件可以嵌套，即一个组件中包含多个组件。  
+例如页头包含导航栏和登录状态栏。
+```javascript
+function Nav(){
+    return <p>This is Navigator</p>;
+}
+
+function PageTop(){
+    return (
+        <>
+            <p>Here is LOGO</p>
+            <Nav />
+            <p>Here goes Login</p>
+        </>
+    );
+}
+
+//...
+root.render(<PageTop />);
+```
+
+组件Component可以以模块Module方式写在 `.js` 文件里，文件名要大写字母开头。
+使用时import这个模块里的Component即可。
+```javascript
+// PageTop.js
+function PageTop(){
+    return <p>PageTop</p>
+}
+export default PageTop;
+
+//index.js
+import PageTop from './PageTop.js';
+//...
+root.render(<PageTop />);
+```
+
+## 3.1 Class Component 类组件
+React 16 虽然不会去掉Class Component，但建议使用Function Component。
+Class组件的简单实现在前例已经提过，这里继续其他要点。
+
+* 构造函数  
+和JAVA不同，构造函数直接名为 `constructor()`；  
+构造函数是初始化组件属性的地方，组件属性应该保存在名为 `state` 的对象中；  
+构造函数里运行 `super()` ，调用父类的构造函数；
+```javascript
+class Title extends React.Component{
+    constructor(){
+        super();
+        this.state = {author : "Peter"};
+    }
+    render(){
+        return <h1>This is the Title by {state.author}.</h1>;
+    }
+}
+```
+* Props  
+除了state，也可以用props处理组件属性；
+```javascript
+class Title extends React.Component{
+    constructor(props){ //构造函数以props接受Argument
+        super(props);
+        this.state = {author : props.author};   //把props保存到state
+    }
+    render(){
+        return <h1>This is the Title by {this.props.author}.</h1>;      //直接使用props的参数
+    }
+}
+
+//...
+root.render(<Title author="Peter" />); //调用组件时传Argument给组件
+```
+
+* state 对象  
+如上例可见，Class组件的构造函数可以指定 `state` 对象；  
+state 对象的访问和Function组件的Hook一样，[state, setState] = useState();  
+读 `state`对象需要用 this.state.prop 语句；  
+写 `state`对象需要用 this.setState(objProps);  
+一定要通过setState()写state，这样可以触发React重渲染页面；
+
+* 组件的生命周期  
+每个组件的生命周期都有三个阶段：加载（Mounting），更新（Updating），卸载（Unmounting）  
+在每个阶段 React都会按一个特定顺序调用组件中的函数（除非组件没定义该函数），具体如下：  
+    * 加载期  
+    `constructor()`  
+        //构造函数是最早被调用的，作用是初始化对象及属性  
+          
+        `getDerivedStateFromProps()`  
+        //在render()之前被调用，渲染前用props更改state  
+        
+        `render()`  
+        //正式渲染，这是组件必要的函数，返回JSX/HTML  
+        
+        `componentDidMount()`   
+        //渲染之后被调用，如果配合“修改state可以触发re-render”的特性，这里可以造成一个死循环的状态。要多加小心。  
+    * 更新期
+    * 卸载期
+
