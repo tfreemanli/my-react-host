@@ -346,7 +346,7 @@ root.render(<PageTop />);
 React 16 虽然不会去掉Class Component，但建议使用Function Component。
 Class组件的简单实现在前例已经提过，这里继续其他要点。
 
-* 构造函数  
+* 3.1.1 构造函数  
 和JAVA不同，构造函数直接名为 `constructor()`；  
 构造函数是初始化组件属性的地方，组件属性应该保存在名为 `state` 的对象中；  
 构造函数里运行 `super()` ，调用父类的构造函数；
@@ -361,8 +361,8 @@ class Title extends React.Component{
     }
 }
 ```
-* Props  
-除了state，也可以用props处理组件属性；
+* 3.1.2 Props  
+除了state，也可以用props处理组件属性；  
 ```javascript
 class Title extends React.Component{
     constructor(props){ //构造函数以props接受Argument
@@ -378,28 +378,80 @@ class Title extends React.Component{
 root.render(<Title author="Peter" />); //调用组件时传Argument给组件
 ```
 
-* state 对象  
+* 3.1.3 state 对象  
 如上例可见，Class组件的构造函数可以指定 `state` 对象；  
 state 对象的访问和Function组件的Hook一样，[state, setState] = useState();  
 读 `state`对象需要用 this.state.prop 语句；  
 写 `state`对象需要用 this.setState(objProps);  
 一定要通过setState()写state，这样可以触发React重渲染页面；
 
-* 组件的生命周期  
+* 3.1.4 组件的生命周期  
 每个组件的生命周期都有三个阶段：加载（Mounting），更新（Updating），卸载（Unmounting）  
 在每个阶段 React都会按一个特定顺序调用组件中的函数（除非组件没定义该函数），具体如下：  
-    * 加载期  
+    * **加载期**  
     `constructor()`  
         //构造函数是最早被调用的，作用是初始化对象及属性  
           
         `getDerivedStateFromProps()`  
-        //在render()之前被调用，渲染前用props更改state  
+        //在render()之前被调用，可以在渲染前用props重置state，以防state在构造函数被修改  
         
         `render()`  
-        //正式渲染，这是组件必要的函数，返回JSX/HTML  
+        //正式渲染，这是组件必要的函数，返回 JSX/HTML 给DOM 
         
         `componentDidMount()`   
         //渲染之后被调用，如果配合“修改state可以触发re-render”的特性，这里可以造成一个死循环的状态。要多加小心。  
-    * 更新期
-    * 卸载期
+    * **更新期**  
+    `getDerivedStateFromProps()`  
+    //组件更新时被React第一个被调用的函数，作用和加载期时一样，可以用props重置state
 
+        `shouldComponentUpdate()`  
+        //返回一个boolean给React，React凭此决定是否重渲染  
+
+        `render()`  
+        //一个组件一定要有一个render()，同上
+
+        `getSnapshotBeforeUpdate(prevProps, prevState)`  
+        //可以得到React调用时输入的重渲染前的props/state的快照，这个函数必须和componentDidUpdate()一起出现，否则会出错
+
+        `componentDidUpdate()`  
+        //如果配合“修改state可以触发re-render”的特性，这里有可能造成一个死循环的状态，要多加小心。  
+
+    * **卸载期**  
+    `componentWillUnmount()`  
+    //React在卸载组件时只调用这一个组件内的预设函数  
+    //但组件只能被上级组件(容器)卸载
+
+## 3.2 React组件的 Props
+如在 3.1.2 介绍过，React组件的Props就像函数的参数，可以让组件在构造时接受render输入的参数，render通过标签的Attribution传参数。
+Props的类型可以是：字符串，变量，对象。
+* 字符串  
+```javascript
+//组件
+function Car(props){
+    return <p>I am a {props.brand}!</p>;
+}
+//调用
+root.render(<Car brand="Mazda">);
+```
+
+* 变量
+```javascript
+//组件
+function Car(props){
+    return <p>I am a {props.brand}!</p>;
+}
+//调用
+const var = "Mazda";
+root.render(<Car brand={ var }>);
+```
+
+* 对象 
+```javascript
+//组件
+function Car(props){
+    return <p>a { props.price} {props.info.brand} </p>;
+}
+//调用
+const obj = {brand:"Mazda", year:2018, color:"red"};
+root.render(<Car info={ obj } price="$12K">);
+```
