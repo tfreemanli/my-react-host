@@ -722,21 +722,559 @@ React的Textarea和HTML的有点不同：
 对 \<textarea> 和 \<select> 这样改变后，React就可以用相同方式处理所有输入组件了。
 
 ## 4.3 Router 页面路由（地址映射）
-页面路由即页面间切换
-React 是单页面应用，本身不包括页面路由功能，自行用npm安装React Router是比较流行的解决方案，在不刷新整个网页的情况下在不同视图之间切换。
-React Router可以“向App快速添加视图和数据流，同时保持页面与URL间的同步”。
+页面路由即页面（视图）间切换，跳转。
+React 是单页面应用，本身不包括页面路由功能，自行用npm安装`react-router-dom`是比较流行的解决方案，在不刷新整个网页的情况下在不同视图之间切换。  
+React Router可以“向App快速添加视图和数据流，同时保持页面与URL间的同步”。  
+* 文件结构  
+/public/index.html <--- 对外的主文件，\<root>所在  
+/src/index.js	<-- 主控页面，可调试监控开关，调用App等，往root渲染   
+/src/App.js		<-- React App 主程序所在
+
+可以在 src 里添加更多模块作页面，文件名按模块命名规则，例如：
+
+	/src/pages/Home.js  
+	/src/pages/Layout.js  
+	/src/pages/Blogs.js  
+	/src/pages/Contact.js  
+	/src/pages/NoPage.js  
+
+在 `App.js` 主程序中就可以import这些模块，并且使用 Routers 和 Router 等模块定义路由表了。  
+路由表应该就相当于 *路径节点* 和 *模块* 的对应表，就是path和element。
+
+
+```javascript
+import ReactDOM from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout from "./pages/Layout";
+import Home from "./pages/Home";
+import Blogs from "./pages/Blogs";
+import Contact from "./pages/Contact";
+import NoPage from "./pages/NoPage";
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}> 	
+          <Route index element={<Home />} />
+          <Route path="blogs" element={<Blogs />} />
+          <Route path="contact" element={<Contact />} />
+          <Route path="*" element={<NoPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+```
+\<Routes> 可以有多个。  
+\<Route> 可以嵌套，第一个\<Route>指定根路径对应的Layout组件是所有页面的出发点，找到req的URL相应模块后返回给Layout。  
+后面被嵌套的\<Route>节点继承并添加到父节点，所以 Blogs 的 path 是结合了父节点的 “/”，成了“/blogs”。  
+Home 节点没有 path 属性，而有 index 属性，指定了该组件为父节点“/”的默认组件。  
+把path设成 * 就是兜着所有父节点“/”以下的URL请求，可当作 404 使用。
+
+`Layout.js` 属于View，构建导航栏提供Link跳转，把Route传来的模块显示在Outlet中
+```javascript
+import { Outlet, Link } from "react-router-dom";
+
+const Layout = () => {
+  return (
+    <>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/blogs">Blogs</Link>
+          </li>
+          <li>
+            <Link to="/contact">Contact</Link>
+          </li>
+        </ul>
+      </nav>
+
+      <Outlet />
+    </>
+  )
+};
+
+export default Layout;
+```
+\<Layout> 组件使用了 \<Link> 和 \<Outlet>
+Outlet 渲染了当前 App.js 选择的节点。
+Link 是为了设置URL并追踪浏览历史。所有内部链接，React都使用 Link 而不使用 \<a href="">
+这个“Layout route”是个共用组件，可以为所有页面插入共用内容，诸如导航菜单。
+
+其他Home、Blog、Contacts的页面只要内容输出则可。
 
 ## 4.4 Memo 备注
+使用memo令组件即使在属性发生改变时可以跳过渲染。  
+举例：  
+组件1嵌套了一个组件2，当 组件1 的属性发生改变触发重渲染，嵌套的 组件2 即使没有任何改变也被重渲染了，浪费了CPU。  
+memo的解决方法是在 组件2 使用memo：
+```javascript
+import { memo } from 'react';
+
+const Comp2 = () => {
+	return "I am Comp2";
+}
+
+export default memo(Comp2);
+
+```
+因为组件1不需要任何处理，所以可以说memo对父组件是透明的。 问题是，如果组件2需要用到组件1的参数作为props呢？还能用memo吗？
+
 ## 4.5 CSS
+React支持CSS有三种输入方式：  
+（看起来无论属性名使用哪种方式，编译器最后编译结果都是一致的。）
+### 1. 行内CSS  
+HTML的行内CSS写法是 `style="color:red; font-size=12;"`  
+而React JSX的写法要略作改动
+```javascript
+ <div style={{ color:"red"; fontSize:"12px"; }}> Text </div>
+ //外大括号是JSX表达式，内大括号是对象
+```
+HTML CSS属性命名有“-”号，例如 font-size，而React CSS的属性名改用驼峰命名法，fontSize、backgroundColor等。
+
+从上例可见，React可以用对象作CSS对象变量。
+```javascript
+const myStyle = {
+	color: "red";
+	fontSize: "12px";
+	padding: "5px"
+};
+return (
+	<div style={myStyle}> Text </div>
+);
+```
+
+### 2. CSS Stylesheet
+创建一个App.css文件，并 `import './App.css'` 到模块里。  
+这种方式CSS的写法：  
+CSS对象名使用驼峰命名；  
+属性名和HTML一样，可以使用“-”，如`font-size`。
+
+./App.css
+```CSS
+.myColor {
+	color: DarkBlue;
+	font-size: 14px;
+}
+```
+
+使用时  
+> \<h1 className=“myColor”> Text </h1>
+
+### 3. CSS 模块
+这个看起来很像 stylesheet，差别在于
+* css文件后续名为 xxxxx.modual.css，
+* 定义的CSS只对导入的模块有效，不用担心重名的CSS
+* 如果CSS Stylesheet有重名的属性，则Stylesheet优先，如下例第一句则使用.css里面的属性设置而非.module.css的属性设置。
+
+> import styles from 'xxxxx.modual.css'
+> import 'xxxxx.css'
+
+使用时  
+> \<h1 className={styles.myColor}> Text </h1>
+> \<h1 className=“myColor”> Text </h1>
+
 ## 4.6 Sass
+Sass是需要预处理的CSS，为CSS提供变量和逻辑判断，提前运行生成真正的css之后再把css发给浏览器。
+
+React Sass需要另外安装
+```
+> npm i sass
+```
+
+Sass文件名后续是 `.scss`。（为什么不是sass，抓狂ing）
+举例：myStyle.scss定义如下
+```css
+$myColor: red;
+h1 {
+	color: $myColor;
+}
+```
+使用时和普通 stylesheet 一样则可。
+```javascript
+import "myStyle.scss";
+
+return (
+	<h1> Text </h1>
+);
+```
 
 # 5. React 的 Hooks（挂钩）
 ## 5.1 基本概念
+Hooks从React v16.8 可以引入，使函数式组件（Function Component）可以访问state等设置，函数式组件已经可以取代 ‘类式组件 Class Component’ 了。
+
+Hooks使函数组件和React的一些特色“挂钩”，例如：状态state，生命周期等。类组件可以定义成员变量来实现。
+
+使用hooks有3个规则需要遵循：
+* Hooks只能在函数式组件内调用（在类组件中无效）
+* Hooks只能在组件顶部调用：
+* Hooks必须是无条件的
+
+如果用户有状态类型 stateful 的逻辑需要重用，也可以自定义Hooks
+
 ## 5.2 useState
+**作用**：跟踪状态state
+> import { useState } from "react"
+
+作为一个命名输出，从react中解构（destructure）出 `useState()` 函数。  
+
+`useState()` 接受一个初始状态值，并返回数组解构出两个参数（函数）：
+* 当前的状态值
+* 一个可以修改状态的函数
+
+```javascript
+import {useState} from 'react';
+
+const [currValue， setValue] = useState("red");
+```
+useState("red") 初始化状态值为“red”，并返回状态值和修改函数。
+currValue就是当前状态值，变量名可以自己定义。  
+setValue就是就是修改状态的函数名，setValue("blue") 则可修改状态值了。  
+但是不能直接 currValue="blue" 这是被禁止的。
+
+### 初始化state
+State可以储存的状态值有：字符串、数字、boolean、数组、对象，以及这些的组合。
+
+组件中可以有多个useState来跟踪多个单独的状态值，又或者可以用单独useState 一个对象包含多个状态值。
+
+```javascript
+const [val, setVal] =  useState({
+	var1: "string",
+	var2: 1,
+	var3: true
+})
+
+return <>{val.var1} and {val.var2}</>
+```
+### 修改state
+修改单一状态值直接用修改函数则可，如：setValue("blue")。
+如果状态是对象，修改函数不能放单独一个属性，否则其他属性就会被删除掉了。如上例：
+```javascript
+setVal({var2:2});
+//错误，这样会把var1和var3都删掉了
+
+onClick={setVal({...val, var2:2})};
+//错误，这写法React在加载时就已经执行setVal，而不等onClick的时候执行
+
+onClick={()=> setVal({...val, var2:2})};
+//正确执行，但异步运行容易错误计算val的状态
+onClick={()=> setVal(
+	(prevVal)=> return {...prevVal, var2:2}
+)};
+//正确执行，React更推荐这样写法，在展开prevVal时才预估prevVal的值，而非如上句的val值是在Click时预估的。
+```
+
+<p style="color:orange"> **注意** 如上例，无论使用哪种Hooks，当使用setHooks()的输入包含变量时，否则尽量都使用arrow function作输入，避免异步运行出错。</p>
+
 ## 5.3 useEffect
+**作用** 在组件中实现副效果，例如：抓取数据、直接更改DOM、定时器等。
+
+### 使用
+useEffect接受两个可选的参数：
+```javascript
+useEffect(<function>,<dependency>)
+```
+当dependency数组中指定的state发生改变时，执行function。
+```javascript
+useEffect(()=>{
+	//第一次会运行
+	//以后每当 prop 或 state 值改变时运行
+},[prop, state])；
+```
+* 要函数加载时只运行一次，把第二个参数写成一个空数组“[]”；
+* 想每次重渲染都运行，则不填写第二个参数；
+* 指定运行的条件，则使用数组作第二场数
+
+**注意** 某些副效果需要手动清理以防止内存泄漏，如定时器，Event Listener等
+```javascript
+useEffect(()=>{
+	let timer = setTimeout(setState((c)=> c + 1),1000);
+	return ()=> cleanTimeout(time);
+},[]);
+
+```
+
 ## 5.4 useContext
+**作用** 可全局管理状态，可以和useState一起使用，与嵌套的组件共用状态值。
+
+反面例子，如果不用Context，父组件想把state传递给子子子组件，就需要把state当作props那样一层层传递下去。
+
+注意，这些组件都在相同一个.js文件中，否则还是要props传递。
+
+### 创建Context
+导入 createContext 并初始化一个 UserContext。
+在顶层组件Comp1 创建Context组件，嵌套其他组件。状态user传给嵌套的Comp2，
+```javascript
+import {useState, createContext} from 'react';
+
+const UserContext = createContext();
+// createContext() 可以在组件外的顶部运行
+// UserContext就是静态变量，这样才能为所有组件共用。
+
+function Comp1() {
+	const [user, setUser] = useState("Peter");
+	return (
+		<UserContext.Provider value={user}>
+			<h1>{'Hello ${user}'}</h1>
+			<Comp2 user={user}>
+		</UserContext.Provider>
+	)
+}
+```
+
+*<span style="color:orange">由于函数式组件的封闭性，要实现这些组件之间的数据“共用（Globally）”就需要一个在组件外的Context。但这个Context的作用域也仅仅是一个 .js 文件之内，否则还是需要用props传递给别的 .js 文件。</span>*
+
+### 使用 useContext 挂钩
+
+所有被嵌套的组件都可以使用Context，导入 useContext
+```javascript
+import { useState, createContext, useContext } from "react";
+
+function Component5() {
+  const user = useContext(UserContext);
+  //UserContext 是同一个文件中的组件之外的变量，所以这里可以访问
+
+  return (
+    <>
+      <h1>Component 5</h1>
+      <h2>{`Hello ${user} again!`}</h2>
+    </>
+  );
+}
+
+```
+
+<span style="color:orange">就上面例子来看，既然只是在同一个文件中，不用Context而改用一个全局变量也可以实现相同效果，虽然封装性就差了。这样的Context有点鸡肋，可能还有别的其他更好的用途。</span>
+
 ## 5.5 useRef
+**作用一** 存储跟踪一些不需要触发重渲染的状态
+
+**返回** 一个对象，包括一个current属性
+
+```javascript
+import {useRef} from 'react';
+
+const count = useRef(0);
+//
+useEffect(()=>{
+	count.current ++;
+})
+```
+
+### 和 useState 比较
+* useState返回两个对象：状态值，修改函数。  
+每次修改状态值就触发一次重渲染。
+* useRef 返回一个对象，包括一个属性：current；  
+修改useRef的状态值，可以跟随useState，也可以另外用useEffect。同时注意异步处理，所以尽量使用箭头函数。
+
+**作用二** 访问DOM元素
+通常我们用React来控制DOM，但也有些可以使用useRef而没有带来麻烦的例外情况。
+
+在React里，我们给一个DOM标签里添加 ref 属性，就可以直接地访问/使用这个DOM了。
+
+```javascript
+const inputElement = useRef();
+const focusInput = () => {
+	inputElement.current.focus();
+}
+return (
+	<>
+		<input type="text" ref={inputElement} />
+		<input type="button" onClick={focusInput}> set focus </input>
+	</>
+);
+
+```
+
+**作用三** 追踪State的改变，因为在多次渲染之间我们可以保持着useRef的值。
+
+```javascript
+function App() {
+  const [inputValue, setInputValue] = useState("");
+  const previousInputValue = useRef("");
+
+  useEffect(() => {
+    previousInputValue.current = inputValue;
+  }, [inputValue]);
+
+  return (
+    <>
+      <input
+        type="text"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+      />
+      <h2>Current Value: {inputValue}</h2>
+      <h2>Previous Value: {previousInputValue.current}</h2>
+    </>
+  );
+}
+```
+
+上例中的执行顺序是关键：
+1. 输入框输入时触发setInputValue，修改了state的inputValue。
+2. 触发重渲染，即return部分代码。inputValue显示新的输入的内容，而previous的还没有修改，只显示旧的值。
+3. 最后才触发useEffect，把inputValue记录在到Ref中。
+
 ## 5.6 useReducer
-## 5.7 useCallback
-## 5.8 useMemo
+（这个挂钩还有很多不明白的地方，仅供欣赏。）  
+**作用** 和useState相似，useReducer允许自定义的状态逻辑。
+如果需要跟踪那些依赖于复杂逻辑的状态值，useReducer是不错的选择。
+**返回** 一个当前状态值和一个dispatch方法。
+### 使用
+useReducer接受两个可选的参数。
+```javascript
+useReducer(<reducer>,<initState>);
+```
+其中reducer就是自定义的状态逻辑函数，reducer返回就是useReducer跟踪的状态值或对象；initState是初始值（值或对象皆可）
+
+举例：
+```javascript
+import { useReducer } from "react";
+import ReactDOM from "react-dom/client";
+
+const initialTodos = [
+  {
+    id: 1,
+    title: "Todo 1",
+    complete: false,
+  },
+  {
+    id: 2,
+    title: "Todo 2",
+    complete: false,
+  },
+];
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "COMPLETE":
+      return state.map((todo) => {
+        if (todo.id === action.id) {
+          return { ...todo, complete: !todo.complete };
+        } else {
+          return todo;
+        }
+      });
+    default:
+      return state;
+  }
+};
+
+function Todos() {
+  const [todos, dispatch] = useReducer(reducer, initialTodos);
+
+  const handleComplete = (todo) => {
+    dispatch({ type: "COMPLETE", id: todo.id });
+  };
+
+  return (
+    <>
+      {todos.map((todo) => (
+        <div key={todo.id}>
+          <label>
+            <input
+              type="checkbox"
+              checked={todo.complete}
+              onChange={() => handleComplete(todo)}
+            />
+            {todo.title}
+          </label>
+        </div>
+      ))}
+    </>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<Todos />);
+```
+
+reducer(state, action)参数的定义是固定的吗？  
+dispatch函数怎么用？就是reducer接收的action吗？
+
+## 5.7 useMemo
+**作用**   
+返回一个Memoized（缓存的）值
+
+Memoized的意思可以想象为“缓存的”，当React处理一些大型运算得到结果后，把结果缓存起来已被调用，而无需每次渲染都重新运算一次。只有当该运算所以依赖的条件变更时才去重新运算。这样可以节省CPU，提高效率。
+
+useMemo和下一章的useCallBack很相似，一个是返回缓存的值/对象，一个是返回缓存的回调函数。
+
+**使用** 
+
+useMemo 接受两个参数：大型运算的函数，触发重新运算的条件状态值。  
+useMemo 返回的就是大型运算的结果值。
+```javascript
+const result = useMemo(() => expensiveFunction() , [triggerState]);
+```
+
+## 5.8 useCallback
+**作用**   
+返回一个Memoized（缓存的）回调函数（或组件）。本质上“函数即值，值即函数”，所以函数体本身的变更也会触发重渲染，称为“referential equality”
+
+譬如一个组件内有两个跟踪的state状态值或组件。  
+一般情况下，当其中一个变动时整个组件就会重渲染一次，而我们希望当状态值变动时内嵌的组件不更新不参与重渲染，以提高效率。
+之前介绍过 React 的 Memo 可以避免重渲染#￥%……&*（）
+
+#￥%……&*（）
+
+太无聊了，老子不写了。
+
+
 ## 5.9 自定义挂钩
+挂钩是可重用的函数。
+
+当我们有一些组件逻辑需要被其他组件使用时，就可以把这些逻辑提取出来成为一个自定义挂钩。
+
+自定义挂钩命名以“use”开头。
+
+例如我们创建一个按url抓取数据的挂钩 useFetch(url):
+```javascript
+import {useState, useEffect} from 'react';
+
+const useFetch = (url)=>{
+	const [data, setData] = useState();
+	useEffect(()=>{
+		fetch(url)
+			.then((res)=>res.json())
+			.then((data)=>setData(data));
+	},[])
+	return [data];
+}
+export default useFetch;
+```
+然后这个自定义的 useFetch(url) 就可以在不同组件中被调用了。
+例如：App.js
+```javascript
+import ReactDOM from 'react-dom/client';
+import useFetch from './useFetch';
+
+const App = ()=>{
+	const [data] = useFetch("https://jsonplaceholder.typicode.com/todos");
+
+	return (
+		<>
+			{data &&
+				data.map((item)=>{
+					return (
+						<p key={item.id}>{item.title}</p>
+					)
+				})
+			}
+		</>
+	);
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+```
+
+为什么不采用一个共用函数呢？？又或者挂钩其实即是共用函数？

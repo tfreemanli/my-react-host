@@ -1,15 +1,16 @@
-import { useState, useEffect } from "react";
+import { createContext, useContext } from "react";
 
+function Component5(contxt) {
 
-function Timer() {
-  const [count, setCount] = useState(0);
+	const user = useContext(contxt);
+	//const user = useContext();
 
-  useEffect(() => {
-    return ()=> clearTimeout(setTimeout(()=>setCount((count) => count + 1), 2000)
-	)
-  }, []);
+	return (
+	  <>
+		<h1>Component Home</h1>
+		<h2>{`Hello ${user} again!`}</h2>
+	  </>
+	);
+  }
 
-  return <h1>I've rendered {count} times!</h1>;
-}
-
-export default Timer;
+export {Component5};

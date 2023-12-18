@@ -8,6 +8,13 @@ const Layout = () => {
           <li>
             <Link to="/">Home</Link>
           </li>
+		  <li>
+			IgottaTellya
+		    <ul>
+				<li>Hahahahah</li>
+				<li>Hahahahah</li> 
+			</ul>
+		  </li>
           <li>
             <Link to="/blogs">Blogs</Link>
           </li>
@@ -21,6 +28,9 @@ const Layout = () => {
       </nav>
 
       <Outlet />
+
+	  T_T T_T
+	  
     </>
   )
 };
