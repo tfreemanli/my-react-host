@@ -46,7 +46,7 @@ const App = ()=>{
   // render the fetched Contentful data
   return (
     <div className="App">
-		<p>{page.total} data successfully fetched from Contentful CMS</p>
+		<p>{page.total} entries successfully fetched from Contentful CMS</p>
 		{page.items.map((item)=>( 
 
 			<header className="App-header">
