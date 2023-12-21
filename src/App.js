@@ -1,18 +1,23 @@
 import { useState, useEffect } from "react";
 import "./App.css";
+//import contentful from 'contentful';
 
-
-//https://graphql.contentful.com/content/v1/spaces/ut5kkjbz9h3a/explore?access_token=DWCMBdc9GDrVtjQamk5qLlxvbWGGHHNgtc_2PBeQWbU
 const query = `
 {
-	pageBlogPost(id:"4YpnxRJ6o0uhD0pxY7hHRF"){
-	  title
+	pageTestCollection {
+	  total
+	  items {
+		title
+		photo {
+		  url
+		}
+	  }
 	}
   }
 `;
 
-function App() {
-  const [page, setPage] = useState(null);
+const App = ()=>{
+	const [page, setPage] = useState(null);
 
   useEffect(() => {
     window
@@ -20,7 +25,7 @@ function App() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer DWCMBdc9GDrVtjQamk5qLlxvbWGGHHNgtc_2PBeQWbU",
+          Authorization: "Bearer 896XWFIUDmfvueftAFHLulaNNDlNGwjt7XwigcgSKkU",
         },
         body: JSON.stringify({ query }),
       })
@@ -30,7 +35,7 @@ function App() {
           console.error(errors);
         }
 
-        setPage(data.pageBlogPost);
+        setPage(data.pageTestCollection);
       });
   }, []);
 
@@ -41,9 +46,16 @@ function App() {
   // render the fetched Contentful data
   return (
     <div className="App">
-      <header className="App-header">
-	  <p>{page.title}</p>
-      </header>
+		<p>{page.total} data successfully fetched from Contentful CMS</p>
+		{page.items.map((item)=>( 
+
+			<header className="App-header">
+				<img src={item.photo.url} className="App-logo" alt="logo" />
+				<p>{item.title}</p>
+			  </header>
+
+		 ))}
+      
     </div>
   );
 }
