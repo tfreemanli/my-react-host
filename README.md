@@ -1,8 +1,8 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/2980586b-1496-4d3e-9334-a58ce654f893/deploy-status)](https://app.netlify.com/sites/freemanli/deploys)
 
-# This is my React_Learning project
+# Project-based React learning space
 
-Deployed to [Netlify.com](https://netlify.com ).
+Thanks [Netlify.com](https://netlify.com ).
 
 Preview：<https://freemanli.netlify.app/>
 
