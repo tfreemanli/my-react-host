@@ -71,9 +71,16 @@ ECMAscript6 发布于2016，是JavaScript最新标准版本。React经常使用�
 * Ternary Operator
 * Spread Operator
 
+React ES6 语法特点整体来说有：
+* 少用if，用三元、与或门代替；
+* 少用循环，多用 .map() 、展开或解构；
+* 少用基本类型，多用数组、对象、函数；
+* 少用var、let，多用const；
+* 多用箭头函数封装，避免异步处理出错；
+
 
     ## 1.1. Class 类
-    谨记JavaScript最大的一个特点——  <font style= color:orange>“函数就是值，值就是函数”</font>
+    谨记JavaScript最大的一个特点——  <font style= color:red>“函数就是值，值就是函数”</font>
 
     JS的Class语法有点像Java，几点注意的如下：
     * 构造函数直接用 `constructor(){}` 命名
@@ -122,8 +129,8 @@ ECMAscript6 发布于2016，是JavaScript最新标准版本。React经常使用�
     ## 1.3. Variables (let, const, var)
 
     参考JavaScript学习笔记
-    貌似W3school的示例中大都使用const。
-    const就是常量，定义时即刻赋值，之后不得再更改。但常量对象的属性、数据等可以更改。
+    貌似W3school的示例中大都使用const，因为变量类型多使用对象或函数。例如 useRef 挂钩返回的就是一个只有一个值的对象 {current: value}  
+    const就是常量，定义时即刻赋值，之后不得再更改。但常量对象的属性、数据等可以更改。  
     var和let都是变量。
 
     （1）let
@@ -142,10 +149,10 @@ ECMAscript6 发布于2016，是JavaScript最新标准版本。React经常使用�
 
     （3）函数  
 
-    以上所说的子域是指<span style="color:orange">循环语句和代码块</span>等，<span style="color:red">但不包括函数。Javascript就利用函数的这个封闭性来实现变量的 private，在JavaScript学习函数的闭包中学习。</span>  
+    以上所说的子域是指<span style="color:green">循环语句和代码块</span>等，<span style="color:orange">但不包括函数。Javascript就利用函数的这个封闭性来实现变量的 private，在JavaScript学习函数的闭包中学习。</span>  
     函数内定义的是局部变量，作用域只在函数范围。  
     函数内不声明而直接赋值的变量，<span style="color:orange">当函数运行过一次之后</span>，就当作是全局变量。  
-    函数能访问全局变量，除非函数使用相同的变量名重新声明该变量或以相同命名为参数。
+    虽然不符合React的代码风格，但函数的能访问全局变量，除非函数使用相同的变量名重新声明该变量或以相同命名为参数。
 
     ## 1.4. Array Methods like .map()
     ES6有许多让人“偷懒”的数组的函数，其中React常用的一个是`Array.map(fnCallBack)` ，这个函数把数组里的元素按顺序执行callBack 函数，运行结果也以Array形式返回。
@@ -506,7 +513,7 @@ function Goal(props) {
   return <B />;
 }
 
-// JSX 的 && 逻辑与
+// JSX 的 && 逻辑与 、|| 逻辑或
 function Goal(props) {
   const isGoal = props.isGoal;
   return (
@@ -732,8 +739,8 @@ React Router可以“向App快速添加视图和数据流，同时保持页面�
 
 可以在 src 里添加更多模块作页面，文件名按模块命名规则，例如：
 
-	/src/pages/Home.js  
 	/src/pages/Layout.js  
+	/src/pages/Home.js  
 	/src/pages/Blogs.js  
 	/src/pages/Contact.js  
 	/src/pages/NoPage.js  
@@ -804,8 +811,11 @@ const Layout = () => {
 export default Layout;
 ```
 \<Layout> 组件使用了 \<Link> 和 \<Outlet>
+
 Outlet 渲染了当前 App.js 选择的节点。
+
 Link 是为了设置URL并追踪浏览历史。所有内部链接，React都使用 Link 而不使用 \<a href="">
+
 这个“Layout route”是个共用组件，可以为所有页面插入共用内容，诸如导航菜单。
 
 其他Home、Blog、Contacts的页面只要内容输出则可。
@@ -825,7 +835,9 @@ const Comp2 = () => {
 export default memo(Comp2);
 
 ```
-因为组件1不需要任何处理，所以可以说memo对父组件是透明的。 问题是，如果组件2需要用到组件1的参数作为props呢？还能用memo吗？
+因为组件1不需要任何处理，所以可以说memo对父组件是透明的。 
+问题是，如果组件2需要用到组件1的参数作为props呢？还能用memo吗？
+答案是使用useMemo或者useCallback挂钩。
 
 ## 4.5 CSS
 React支持CSS有三种输入方式：  
@@ -850,6 +862,7 @@ return (
 	<div style={myStyle}> Text </div>
 );
 ```
+简而言之，只要把CSS写进.js里，所有命名一律改为驼峰命名法以便React访问。如果在另外.css文件里的就只要文件名和变量名改用驼峰命名则可。
 
 ### 2. CSS Stylesheet
 创建一个App.css文件，并 `import './App.css'` 到模块里。  
@@ -1208,6 +1221,18 @@ Memoized的意思可以想象为“缓存的”，当React处理一些大型运�
 
 useMemo和下一章的useCallBack很相似，一个是返回缓存的值/对象，一个是返回缓存的回调函数。
 
+还有一个类似功能的函数 memo() , 前面4.4章时介绍过。
+memo、useMemo、useCallback三者都是为了规避渲染，区别在于：
+* `memo(Component)`   
+对组件使用，整个组件不参与渲染。  
+如果组件有props，可以根据props的类型再配合useMemo或useCallback规避渲染，否则组件可能因为props的变更而重渲染的。
+* `useMemo(Value,[])`   
+对值使用，例如大型运算所得的结果值，可带渲染条件。
+* `useCallback(Function,[])`
+对函数使用。组件渲染时函数体重载，之前缓存的函数体失效，这也是一种变更。useCallback可以规避这种情况。
+
+*注意* 函数即值，值即函数。
+
 **使用** 
 
 useMemo 接受两个参数：大型运算的函数，触发重新运算的条件状态值。  
@@ -1278,3 +1303,8 @@ root.render(<App />);
 ```
 
 为什么不采用一个共用函数呢？？又或者挂钩其实即是共用函数？
+
+
+# 6
+React.createElement('h1', null, "Ford Mustang");
+什么结果
