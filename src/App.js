@@ -50,20 +50,21 @@ const App = ()=>{
   // render the fetched Contentful data
   return (
 	<>
-	<div  className="note" style={{ background: "yellow", padding:"5px"}}>
+	<div  className="note" style={{ color:"yellow",background: "rgba(250,15,10,0.8)", padding:"2px"}}>
 		<h4 style={{textAlign: "center" }}>Resize the browser window to see the responsive effect.</h4>
 	</div>
 
 	<div className="header">
-	<h1>My Website</h1>
-	<p>With a <b>flexible</b> layout.</p>
-	</div>
-
-	<div className="navbar">
-	<a href="/">Link</a>
-	<a href="/">Link</a>
-	<a href="/">Link</a>
-	<a href="/">Link</a>
+		<div className="banner">
+		<h1>My Website</h1>
+		<p>With a <b>flexible</b> layout.</p>
+		</div>
+		<div className="navbar">
+		<a href="/">Link</a>
+		<a href="/">Link</a>
+		<a href="/">Link</a>
+		<a href="/">Link</a>
+		</div>
 	</div>
 
 	<div className="row">

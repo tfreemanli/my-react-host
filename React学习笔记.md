@@ -851,6 +851,8 @@ HTML的行内CSS写法是 `style="color:red; font-size=12;"`
 ```
 HTML CSS属性命名有“-”号，例如 font-size，而React CSS的属性名改用驼峰命名法，fontSize、backgroundColor等。
 
+分隔符从分号变成 逗号。
+
 从上例可见，React可以用对象作CSS对象变量。
 ```javascript
 const myStyle = {

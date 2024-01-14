@@ -4,16 +4,23 @@
   
   /* Style the body */
   body {
-	font-family: Arial;
+	font-family: Tahoma, Verdana, Geneva, sans-serif;
+	font-size: medium;
 	margin: 0;
   }
   
   /* Header/logo Title */
   .header {
-	padding: 60px;
+	padding: 0px;
 	text-align: center;
 	background: #1abc9c;
 	color: white;
+	position: sticky;
+	top: 0px;
+  }
+
+  .banner {
+	padding: 20px;
   }
   
   /* Style the top navigation bar */
@@ -25,15 +32,16 @@
   /* Style the navigation bar links */
   .navbar a {
 	color: white;
-	padding: 14px 20px;
+	padding: 10px 20px;
 	text-decoration: none;
 	text-align: center;
   }
   
   /* Change color on hover */
   .navbar a:hover {
-	background-color: #ddd;
+	background-color: #6a6a6a;
 	color: black;
+	transition: background-color 0.1s;
   }
   
   /* Column container */
@@ -45,14 +53,14 @@
   /* Create two unequal columns that sits next to each other */
   /* Sidebar/left column */
   .side {
-	flex: 30%;
+	flex: 20%;
 	background-color: #f1f1f1;
 	padding: 20px;
   }
   
   /* Main column */
   .main {
-	flex: 70%;
+	flex: 80%;
 	background-color: white;
 	padding: 20px;
   }
@@ -62,6 +70,9 @@
 	background-color: #aaa;
 	width: 100%;
 	padding: 20px;
+	border-radius: 5px;
+	border-top-left-radius: 20px ;
+	border-bottom-right-radius: 20px;
   }
   
   /* Footer */
@@ -73,10 +84,18 @@
   
   /* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
   @media screen and (max-width: 600px) {
-	.row, .navbar {   
+	.row  {   
 	  flex-direction: column;
 	}
 	.note {
 		display: none;
+	}
+	
+	.header {
+		position: relative;
+	}
+	.navbar {
+		position: sticky;
+		top: 0px;
 	}
   }
