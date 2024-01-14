@@ -846,7 +846,7 @@ React支持CSS有三种输入方式：
 HTML的行内CSS写法是 `style="color:red; font-size=12;"`  
 而React JSX的写法要略作改动
 ```javascript
- <div style={{ color:"red"; fontSize:"12px"; }}> Text </div>
+ <div style={{ color:"red", fontSize:"12px"; }}> Text </div>
  //外大括号是JSX表达式，内大括号是对象
 ```
 HTML CSS属性命名有“-”号，例如 font-size，而React CSS的属性名改用驼峰命名法，fontSize、backgroundColor等。

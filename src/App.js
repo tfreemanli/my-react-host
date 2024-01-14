@@ -60,10 +60,10 @@ const App = ()=>{
 	</div>
 
 	<div className="navbar">
-	<a href="#">Link</a>
-	<a href="#">Link</a>
-	<a href="#">Link</a>
-	<a href="#">Link</a>
+	<a href="/">Link</a>
+	<a href="/">Link</a>
+	<a href="/">Link</a>
+	<a href="/">Link</a>
 	</div>
 
 	<div className="row">
