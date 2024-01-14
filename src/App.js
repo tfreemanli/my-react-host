@@ -40,23 +40,66 @@ const App = ()=>{
   }, []);
 
   if (!page) {
-    return "Loading...";
+    return (
+		<header className="App-header">
+			<p>Loading...</p>
+		</header>
+	);
   }
 
   // render the fetched Contentful data
   return (
-    <div className="App">
-		<p>{page.total} entries successfully fetched from Contentful CMS</p>
-		{page.items.map((item)=>( 
+	<>
+	<div  className="note" style={{ background: "yellow", padding:"5px"}}>
+		<h4 style={{textAlign: "center" }}>Resize the browser window to see the responsive effect.</h4>
+	</div>
 
-			<header className="App-header">
-				<img src={item.photo.url} className="App-logo" alt="logo" />
-				<p>{item.title}</p>
-			  </header>
+	<div className="header">
+	<h1>My Website</h1>
+	<p>With a <b>flexible</b> layout.</p>
+	</div>
 
-		 ))}
-      
-    </div>
+	<div className="navbar">
+	<a href="#">Link</a>
+	<a href="#">Link</a>
+	<a href="#">Link</a>
+	<a href="#">Link</a>
+	</div>
+
+	<div className="row">
+		<div className="side">
+			<h2>About Me</h2>
+			<h5>Photo of me:</h5>
+			<div className="fakeimg" style={{height:"200px" }}>Image</div>
+			<p>Some text about me in culpa qui officia deserunt mollit anim..</p>
+			<h3>More Text</h3>
+			<p>Lorem ipsum dolor sit ame.</p>
+			<div className="fakeimg" style={{height:"60px" }}>Image</div><br/>
+			<div className="fakeimg" style={{height:"60px" }}>Image</div><br/>
+			<div className="fakeimg" style={{height:"60px" }}>Image</div>
+		</div>
+		<div className="main">
+				<p>{page.total} entries successfully fetched from Contentful CMS</p>
+
+				{page.items.map((item)=>( 
+
+					<div>
+						<h2>{item.title}</h2>
+						<img src={item.photo.url} className="fakeimg" alt="logo" />
+						<p>Some text..</p>
+					</div>
+
+				))}
+			
+			
+		</div>
+	</div>
+
+	<div className="footer">
+	<h2>Footer</h2>
+	</div>
+
+	</>
   );
 }
 

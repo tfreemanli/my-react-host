@@ -2,14 +2,14 @@
 
 # Project-based React learning space
 
-Thanks [Netlify.com](https://netlify.com ).
+Thanks to [W3schools.com](w3schools.com), [Netlify.com](https://netlify.com ) and [Contentful.com](https://contentful.com).
 
 Preview：<https://freemanli.netlify.app/>
 
 Done:
 * √ Foundation of React.js
 * √ Noted *React学习笔记.md*
-* √ Certificate from W3School
+* √ Certificate from W3Schools
 
 Todo:
 * Complete web app
