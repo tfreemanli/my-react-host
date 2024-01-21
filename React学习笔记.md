@@ -1,4 +1,25 @@
+<span id="top"></span>
+
+《React 学习笔记》 
+
+Auth：Freeman Li  
+源版本：[https://Github.com/tfreemanli](https://github.com/tfreemanli/my-react-host/blob/main/React%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.md)  
+资料参考：www.W3schools.com
+
+本笔记是本人在W3Schools.com的学习笔记，内容包括：
+[什么是框架](#框架)  
+[React简述](#简述)  
+[js中的常用语法](#js)  
+[JSX中的常用语法](#jsx)  
+[组件的概念](#组件)  
+[React实现Web常用组件](#web)  
+[React的Hooks](#hooks)  
+
+
+<span id="框架"></span>
+
 # 什么是框架 
+[回顶部 ↑](#top)  
 针对一些JavaScript的高级程序设计产生了JavaScript库，这些库常被称为 JavaScript框架。例如JQuery等。
 
 ```HTML
@@ -13,7 +34,10 @@ $(document).ready(myFunction);
 ```
 随着Javascript发展，对JS的改造比JQuery更彻底了，出现了诸如React、Vue等的框架。
 
+<span id="简述"></span>
+
 # React简述
+[回顶部 ↑](#top)  
 React的运作机制简单说：
 * 在浏览器端，在一个近乎空白的HTML上用JavaScript画出所有的DOM，这个过程称为渲染（Render）  
 
@@ -60,7 +84,10 @@ root.render(myReactApp);
 <span style="color:#E47"> 浏览器里看到的页面是 React 在浏览器端的内存里“画”出来的结果，`ReactDOM.createRoot()` 就是在内存中创建一个模拟的 HTML DOM。每当DOM的内容改变时，React 就重新“画”一次。从MVC模式看，浏览器的画面是内存虚拟环境里各个JS“对象”的 “**V**”，内存里还有对象本身 “**M**” 以及控制逻辑 “**C**”。   
 React 模拟 HTML DOM，所以语法尽量地接近HTML，虽然有些语法和HTML有差别，例如 HTML的 `<input class='xxx'>` 改为了 `<input className='xxx'>`，HTML的 `onclick=func()` 改成了 `onClick=func()` </span>
 
+<span id="js"></span>
+
 # 1. React的准备：ES6 中的常用语法
+[回顶部 ↑](#top)  
 ECMAscript6 发布于2016，是JavaScript最新标准版本。React经常使用的ES6语法知识点包括：
 * Classes
 * Arrow Functions
@@ -246,7 +273,10 @@ React ES6 语法特点整体来说有：
     > (boolean)? {then} : {otherwise};
 
 
+<span id="jsx"></span>
+
 # 2. React的准备：JSX 常用语法
+[回顶部 ↑](#top)  
 JSX = JavaScript XML，是XML语法。   
 React支持JSX，无论是直接渲染JSX还是渲染组件Component，都可以用JSX编译成HTML。使React的语句更简洁，在本文最开始的React简介中就有过简单的例子。
 JSX编译时可以把HTML标签转变成React的Element和DOM，从而无需自己写 `React.creatElement()` 和 `.appendChild()`  
@@ -284,7 +314,10 @@ React的JSX语法里不支持 if 语句，如果需要 if 判断可以
 
 详见章节 3.4
 
+<span id="组件"></span>
+
 # 3. Components（组件）的概念  
+[回顶部 ↑](#top)  
 了解了JSX语法之后，就来看看JSX的具体应用————组件Component。  
 组件就像一个独立的返回JSX(HTML)的函数，目的是代码重用和独立，例如网页页面中include的页头，导航栏，页脚等等。  
 React组件有两种实现方式：Class 和 Function，旧React多用Class类型的组件，新版React引入了Hook后建议使用Function类型的组件。  
@@ -534,7 +567,10 @@ function Goal(props) {
 }
 ```
 
+<span id="web"></span>
+
 # 4. React 实现 Web 页面常用组件
+[回顶部 ↑](#top)  
 以下介绍React如何实现Web常见/常用的组件
 
 ## 4.1 Lists 列表
@@ -921,7 +957,10 @@ return (
 );
 ```
 
+<span id="hooks"></span>
+
 # 5. React 的 Hooks（挂钩）
+[回顶部 ↑](#top)  
 ## 5.1 基本概念
 Hooks从React v16.8 可以引入，使函数式组件（Function Component）可以访问state等设置，函数式组件已经可以取代 ‘类式组件 Class Component’ 了。
 
@@ -1305,8 +1344,3 @@ root.render(<App />);
 ```
 
 为什么不采用一个共用函数呢？？又或者挂钩其实即是共用函数？
-
-
-# 6
-React.createElement('h1', null, "Ford Mustang");
-什么结果
