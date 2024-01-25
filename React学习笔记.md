@@ -7,6 +7,7 @@ Auth：Freeman Li
 资料参考：www.W3schools.com
 
 本笔记是本人在W3Schools.com的学习笔记，内容包括：
+
 [什么是框架](#框架)  
 [React简述](#简述)  
 [js中的常用语法](#js)  
@@ -289,7 +290,7 @@ React支持JSX，无论是直接渲染JSX还是渲染组件Component，都可以
 JSX编译时可以把HTML标签转变成React的Element和DOM，从而无需自己写 `React.creatElement()` 和 `.appendChild()`  
 
 
-JSX中使用的HTML标签不算的字符串，而是直接当作“值”。  
+JSX中使用的HTML标签不算是字符串，而是直接当作“值”。（怪胎一个，快点被淘汰吧）  
 “值”里也可以使用“ { } ”写表达式。
 
 ```javascript
@@ -300,7 +301,8 @@ const imJS = "<p>I am " + firstname + " " + lastname +".</p>";
 JSX的HTML标签如果太多行，可以用 ( ) 包起来。  
 HTML标签只能有一个最上级元素，可以是` <div> <span> <p>` ，甚至是空标签 `<></>` 。  
 HTML标签必须是封闭的。  
-因为关键字 class 在JS中有冲突，所以JSX里的 class 改为了 className
+因为关键字 class 在JS中有冲突，所以JSX里的 class 改为了 className。
+还有style=color:red; 这样的HTML语句在JSX也被相应地改掉，避免冲突。
 
 ```javascript
 const wrapIt = (  //wrap as many lines as it's
@@ -332,7 +334,7 @@ React组件有两种实现方式：Class 和 Function，旧React多用Class类�
 
 - Class组件
     * 必须继承于 React.Component
-    * 必须实现 render() 方法，并返回HTML
+    * 必须实现 render() 方法，并返回JSX/HTML
 
 ```javascript
 class Title extends React.Component{
@@ -341,6 +343,7 @@ class Title extends React.Component{
     }
 }
 ```
+
 - Function组件
 
 ```javascript
@@ -457,7 +460,8 @@ state 对象的访问和Function组件的Hook一样，[state, setState] = useSta
         //正式渲染，这是组件必要的函数，返回 JSX/HTML 给DOM 
         
         `componentDidMount()`   
-        //渲染之后被调用，如果配合“修改state可以触发re-render”的特性，这里可以造成一个死循环的状态。要多加小心。  
+        //渲染之后被调用，如果配合“修改state可以触发re-render”的特性，这里可以造成一个死循环的状态。要多加小心。
+
     * **更新期**  
     `getDerivedStateFromProps()`  
     //组件更新时被React第一个被调用的函数，作用和加载期时一样，可以用props重置state
@@ -736,7 +740,7 @@ function MyForm(){
 设置了value的 <input\> 是一个 **受限组件**，即input 始终保持 value 属性的值。如果想state更新为输入值，就得使用 onChange，并且以 value={state.value} 的方式赋值。  
 
 不设置value的话则是一个 **不受限组件**，渲染出来的元素直接反应用户输入，用户输入不会直接引起state改变，同时以onChange监听。
-不受控的 <input\> 可以设置 defaultValue 属性，设置一个非空的初始值。<input defaultValue="Hello" \/>
+不受控的 <input\> 可以设置 defaultValue 属性，设置一个非空的初始值。`<input defaultValue="Hello" />`
 
 *受控组件* 简单来说就是它的值由React进行管理，而 *非受控组件* 的值则由原生DOM管理。
 
@@ -746,7 +750,7 @@ React的Textarea和HTML的有点不同：
 > ```HTML
 > <textarea> Content </textarea>
 > ```
-> 
+>  
 
 > React : value 属性赋值  
 > ```HTML
@@ -793,7 +797,7 @@ React Router可以“向App快速添加视图和数据流，同时保持页面�
 	/src/pages/NoPage.js  
 
 在 `App.js` 主程序中就可以import这些模块，并且使用 Routers 和 Router 等模块定义路由表了。  
-路由表应该就相当于 *路径节点* 和 *模块* 的对应表，就是path和element。
+路由表应该就相当于 *路径节点* 和 *模块* 的对应表，就是path和element。导航栏所使用的链接就是在路由表中寻址跳转（即按element指定的模块重渲染）的。
 
 
 ```javascript
@@ -816,6 +820,7 @@ export default function App() {
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>
+	  <h1>Make me a Footer</h1>
     </BrowserRouter>
   );
 }
@@ -863,7 +868,8 @@ Outlet 渲染了当前 App.js 选择的节点。
 
 Link 是为了设置URL并追踪浏览历史。所有内部链接，React都使用 Link 而不使用 \<a href="">
 
-这个“Layout route”是个共用组件，可以为所有页面插入共用内容，诸如导航菜单。
+这个“Layout route”是个共用组件，可以为所有页面插入共用内容，诸如导航菜单。  
+路由表放在App模块里就好，路由表的模块甚至可以只是页面的某部分，例如footer模块不需要重渲染，可以放在Outlet模块之外，这样在页面跳转时footer模块就不重渲染了。
 
 其他Home、Blog、Contacts的页面只要内容输出则可。
 
@@ -901,10 +907,11 @@ HTML CSS属性命名有“-”号，例如 font-size，而React CSS的属性名�
 分隔符从分号变成 逗号。
 
 从上例可见，React可以用对象作CSS对象变量。
+
 ```javascript
 const myStyle = {
-	color: "red";
-	fontSize: "12px";
+	color: "red",
+	fontSize: "12px",
 	padding: "5px"
 };
 return (
@@ -986,11 +993,12 @@ Hooks使函数组件和React的一些特色“挂钩”，例如：状态state�
 
 ## 5.2 useState
 **作用**：跟踪状态state
+
 > import { useState } from "react"
 
 作为一个命名输出，从react中解构（destructure）出 `useState()` 函数。  
 
-`useState()` 接受一个初始状态值，并返回数组解构出两个参数（函数）：
+`useState()` 接受一个初始状态值，并返回数组，从中解构两个返回值（函数）：
 * 当前的状态值
 * 一个可以修改状态的函数
 
@@ -1004,10 +1012,13 @@ currValue就是当前状态值，变量名可以自己定义。
 setValue就是就是修改状态的函数名，setValue("blue") 则可修改状态值了。  
 但是不能直接 currValue="blue" 这是被禁止的。
 
+**用途**：单页面内保存某个数据，例如输入框等表单组件，DOM状态。
+
+
 ### 初始化state
 State可以储存的状态值有：字符串、数字、boolean、数组、对象，以及这些的组合。
 
-组件中可以有多个useState来跟踪多个单独的状态值，又或者可以用单独useState 一个对象包含多个状态值。
+组件中可以使用多个useState来跟踪多个单独的状态值，又或者可以用单独useState 一个对象包含多个状态值。
 
 ```javascript
 const [val, setVal] =  useState({
@@ -1036,10 +1047,13 @@ onClick={()=> setVal(
 //正确执行，React更推荐这样写法，在展开prevVal时才预估prevVal的值，而非如上句的val值是在Click时预估的。
 ```
 
-<p style="color:orange"> **注意** 如上例，无论使用哪种Hooks，当使用setHooks()的输入包含变量时，否则尽量都使用arrow function作输入，避免异步运行出错。</p>
+<p style="color:orange"> **注意** 如上例，无论使用哪种Hooks，当使用setHooks()的输入包含变量时，除非仅用函数名，否则尽量都使用arrow function作输入，避免异步运行出错。</p>
 
 ## 5.3 useEffect
-**作用** 在组件中实现副效果，例如：抓取数据、直接更改DOM、定时器等。
+
+**作用和用途**： 在组件中实现副效果，例如：抓取数据、直接更改DOM、定时器等。
+
+我的理解就是一个side effect的映射表，把State和一些function绑定在一起：当state改变时（触发重渲染时）就异步地触发function的执行。
 
 ### 使用
 useEffect接受两个可选的参数：
@@ -1047,15 +1061,17 @@ useEffect接受两个可选的参数：
 useEffect(<function>,<dependency>)
 ```
 当dependency数组中指定的state发生改变时，执行function。
+
 ```javascript
 useEffect(()=>{
 	//第一次会运行
 	//以后每当 prop 或 state 值改变时运行
 },[prop, state])；
 ```
-* 要函数加载时只运行一次，把第二个参数写成一个空数组“[]”；
+
 * 想每次重渲染都运行，则不填写第二个参数；
-* 指定运行的条件，则使用数组作第二场数
+* 要函数加载时只运行一次，把第二个参数写成一个空数组“[]”；
+* 指定运行的条件，则使用数组作第二参数。
 
 **注意** 某些副效果需要手动清理以防止内存泄漏，如定时器，Event Listener等
 ```javascript
@@ -1069,7 +1085,9 @@ useEffect(()=>{
 ## 5.4 useContext
 **作用** 可全局管理状态，可以和useState一起使用，与嵌套的组件共用状态值。
 
-反面例子，如果不用Context，父组件想把state传递给子子子组件，就需要把state当作props那样一层层传递下去。
+**用途**：保存登录状态，保存搜索结果，路由信息，购物车等等全网站共用的状态。
+
+反面例子，如果不用Context，父组件想把state传递给子子子组件，就需要把state当作props那样一层层模块地传递下去。
 
 注意，这些组件都在相同一个.js文件中，否则还是要props传递。
 
@@ -1080,7 +1098,7 @@ useEffect(()=>{
 import {useState, createContext} from 'react';
 
 const UserContext = createContext();
-// createContext() 可以在组件外的顶部运行
+// createContext() 可以在组件外的顶部运行，例如index.js或App.js
 // UserContext就是静态变量，这样才能为所有组件共用。
 
 function Comp1() {
@@ -1119,7 +1137,7 @@ function Component5() {
 <span style="color:orange">就上面例子来看，既然只是在同一个文件中，不用Context而改用一个全局变量也可以实现相同效果，虽然封装性就差了。这样的Context有点鸡肋，可能还有别的其他更好的用途。</span>
 
 ## 5.5 useRef
-**作用一** 存储跟踪一些不需要触发重渲染的状态
+**作用一** 存储跟踪一些不需要触发重渲染的状态值
 
 **返回** 一个对象，包括一个current属性
 
@@ -1140,7 +1158,7 @@ useEffect(()=>{
 修改useRef的状态值，可以跟随useState，也可以另外用useEffect。同时注意异步处理，所以尽量使用箭头函数。
 
 **作用二** 访问DOM元素
-通常我们用React来控制DOM，但也有些可以使用useRef而没有带来麻烦的例外情况。
+通常我们用React来控制DOM，但也有些可以使用useRef而不会带来麻烦的例外情况。
 
 在React里，我们给一个DOM标签里添加 ref 属性，就可以直接地访问/使用这个DOM了。
 
@@ -1189,15 +1207,21 @@ function App() {
 3. 最后才触发useEffect，把inputValue记录在到Ref中。
 
 ## 5.6 useReducer
+
 （这个挂钩还有很多不明白的地方，仅供欣赏。）  
+
 **作用** 和useState相似，useReducer允许自定义的状态逻辑。
 如果需要跟踪那些依赖于复杂逻辑的状态值，useReducer是不错的选择。
+
 **返回** 一个当前状态值和一个dispatch方法。
+
 ### 使用
 useReducer接受两个可选的参数。
+
 ```javascript
 useReducer(<reducer>,<initState>);
 ```
+
 其中reducer就是自定义的状态逻辑函数，reducer返回就是useReducer跟踪的状态值或对象；initState是初始值（值或对象皆可）
 
 举例：
@@ -1269,7 +1293,7 @@ dispatch函数怎么用？就是reducer接收的action吗？
 **作用**   
 返回一个Memoized（缓存的）值
 
-Memoized的意思可以想象为“缓存的”，当React处理一些大型运算得到结果后，把结果缓存起来已被调用，而无需每次渲染都重新运算一次。只有当该运算所以依赖的条件变更时才去重新运算。这样可以节省CPU，提高效率。
+Memoized的意思可以想象为“缓存的”，当React处理一些大型运算得到结果后，把结果缓存起来以备调用，而无需每次渲染都重新运算一次。只有当该运算所以依赖的条件变更时才去重新运算。这样可以节省CPU，提高效率。
 
 useMemo和下一章的useCallBack很相似，一个是返回缓存的值/对象，一个是返回缓存的回调函数。
 
@@ -1314,6 +1338,7 @@ const result = useMemo(() => expensiveFunction() , [triggerState]);
 自定义挂钩命名以“use”开头。
 
 例如我们创建一个按url抓取数据的挂钩 useFetch(url):
+
 ```javascript
 import {useState, useEffect} from 'react';
 
