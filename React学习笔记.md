@@ -991,6 +991,27 @@ Hooks使函数组件和React的一些特色“挂钩”，例如：状态state�
 
 如果用户有状态类型 stateful 的逻辑需要重用，也可以自定义Hooks
 
+常用的6个挂钩：
+
+* [state, setState] = useState(init)  
+允许用户访问一个状态，有输出
+
+* useEffect(fnTodo, [triggers])  
+执行特效，无输出
+
+* state = useContext()   
+Consumer使用外层嵌套的上下文。当然，需要提前先createContext，并有Provider写入state的value。
+
+* [state, fnDispatch] = useReducer(fnReducer, initState)  
+通过 fnDispatch 传入指令，使用加工器把state加工后返回。 
+
+* useMemo()  
+令某个变量不参与重渲染
+
+* useCallback()   
+令某个函数不参与重渲染
+
+
 ## 5.2 useState
 **作用**：跟踪状态state
 
@@ -1089,7 +1110,15 @@ useEffect(()=>{
 
 反面例子，如果不用Context，父组件想把state传递给子子子组件，就需要把state当作props那样一层层模块地传递下去。
 
-注意，这些组件都在相同一个.js文件中，否则还是要props传递。
+### Context的结构
+
+const myContext = React.createContext(); 
+
+React的Context自带一对Provider和Consumer。
+
+即 `<myContext.Provider value={user}>` 和 `useContext(myContext)`
+
+注意，这Provider和Consumer的代码应都写在相同一个.js文件中，因为myContext对象只有一个。而且这也是“全局”的意义所在。
 
 ### 创建Context
 导入 createContext 并初始化一个 UserContext。
@@ -1112,7 +1141,34 @@ function Comp1() {
 }
 ```
 
-*<span style="color:orange">由于函数式组件的封闭性，要实现这些组件之间的数据“共用（Globally）”就需要一个在组件外的Context。但这个Context的作用域也仅仅是一个 .js 文件之内，否则还是需要用props传递给别的 .js 文件。</span>*
+*<span style="color:orange">由于函数式组件的封闭性，要实现这些组件之间的数据“共用（Globally）”就需要一个在组件外的Context。但这个Context的作用域也仅仅是一个 .js 文件之内，否则还是需要用props传递给别的 .js 文件。  
+所以处理方法是把 Context.Provider 和 useContext 写在同一个js文件里，然后封装好之后export出来给不同的页面使用。  
+例如把`<UserContext.Provider value={user}>` export 成 `<UserContextProvider>`，把下例中 `useContext(UserContext)` export成 `useUserContext` </span>*
+
+```javascript
+// MyContext.js 中的写法
+const MyContext = React.createContext();
+const [user, setUser] = useState("Peter");
+
+export const MyContextProvider = ({children}) => {
+	return (
+    <MyContext.Provider value={user}>
+      {children}
+    </MyContext.Provider>
+  );
+}
+
+export const useMyContext = () => {
+	return useContext(MyContext);
+}
+
+
+//App.js 用法
+<MyContextProvider>
+	<AllOtherPages />
+</MyContextProvider>
+
+```
 
 ### 使用 useContext 挂钩
 
@@ -1134,7 +1190,24 @@ function Component5() {
 
 ```
 
-<span style="color:orange">就上面例子来看，既然只是在同一个文件中，不用Context而改用一个全局变量也可以实现相同效果，虽然封装性就差了。这样的Context有点鸡肋，可能还有别的其他更好的用途。</span>
+<span style="color:orange; text-decoration: line-through">就上面例子来看，既然只是在同一个文件中，不用Context而改用一个全局变量也可以实现相同效果，虽然封装性就差了。这样的Context有点鸡肋，可能还有别的其他更好的用途。</span>
+
+是的，上例只是举例，Context主要是为了一大堆的state在层级间通信，而且Context不要写到Component里，要写在一个单独的 Moduale 里，export给其他不同的层级的Component使用就可以实现这一大堆state的共享了。
+
+```javascript
+import { useMyContext } from "MyContext.js";
+
+function ComponentX() {
+	let user = useMyContext();
+  return (
+    <>
+      <h1>Component X</h1>
+      <h2>{`Hello ${user} again!`}</h2>
+    </>
+  );
+}
+
+
 
 ## 5.5 useRef
 **作用一** 存储跟踪一些不需要触发重渲染的状态值
@@ -1206,7 +1279,7 @@ function App() {
 2. 触发重渲染，即return部分代码。inputValue显示新的输入的内容，而previous的还没有修改，只显示旧的值。
 3. 最后才触发useEffect，把inputValue记录在到Ref中。
 
-## 5.6 useReducer
+## 5.5 useReducer
 
 （这个挂钩还有很多不明白的地方，仅供欣赏。）  
 
@@ -1219,10 +1292,18 @@ function App() {
 useReducer接受两个可选的参数。
 
 ```javascript
-useReducer(<reducer>,<initState>);
+const [ state, dispatch ] = useReducer(<reducer>,<initState>);
 ```
 
-其中reducer就是自定义的状态逻辑函数，reducer返回就是useReducer跟踪的状态值或对象；initState是初始值（值或对象皆可）
+其中`<reducer>`就是自定义的状态逻辑函数`reducer(state, action)`，它的返回就是useReducer跟踪的state状态值或对象；initState是初始值（值或对象皆可）
+
+reducer(state, action)参数的定义是固定的：state就是要被复杂处理的状态对象，action是（自定义的）指令对象，例如id、type等，程序员自己知道是咋用就咋用。 
+
+dispatch函数怎么用？ dispatch(action) 就是用户向reducer传递一个action对象的通道，匿名传递则可。 `dispatch({type:"Do_What", id:"any"});` 如果给我来命名，我会把dispatch命名为 setAction。
+
+useReducer存储着一个state和一个reducer，当dispatch被调用收到一个action时，useReducer就把state和action都交给 reducer 按action的提示来执行（复杂的）处理。reducer处理完了再把 state 返回给 useReducer 作为输出。useReducer自己可以重渲染，无需另外useState的。
+
+
 
 举例：
 ```javascript
@@ -1286,10 +1367,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<Todos />);
 ```
 
-reducer(state, action)参数的定义是固定的吗？  
-dispatch函数怎么用？就是reducer接收的action吗？
 
-## 5.7 useMemo
+## 5.6 useMemo
 **作用**   
 返回一个Memoized（缓存的）值
 
@@ -1319,7 +1398,7 @@ const result = useMemo(() => expensiveFunction() , [triggerState]);
 
 ## 5.8 useCallback
 **作用**   
-返回一个Memoized（缓存的）回调函数（或组件）。本质上“函数即值，值即函数”，所以函数体本身的变更也会触发重渲染，称为“referential equality”
+返回一个Memoized（缓存的）回调函数（或组件）。本质上“函数即值，值即函数”，所以函数体本身的变更也会触发重渲染，称为“referential equality”。也就是 fnA() !== fnA()
 
 譬如一个组件内有两个跟踪的state状态值或组件。  
 一般情况下，当其中一个变动时整个组件就会重渲染一次，而我们希望当状态值变动时内嵌的组件不更新不参与重渲染，以提高效率。
