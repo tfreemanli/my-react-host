@@ -167,7 +167,7 @@
   /* Footer */
   .footer, .footer a {
 	height: var(--ft-height);
-	padding: 1rem;
+	padding: 0.5rem 1rem;
 	background: var(--darkbg);
 	color: var(--lightfont);
 	border-top: 3px solid var(--lightbg);
