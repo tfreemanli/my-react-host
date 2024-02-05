@@ -10,8 +10,10 @@
 	--whitebg:rgb(243, 243, 241);
 
 	--white: rgb(255,255,255);
-	--gray: rgb(162, 162, 162);
 	--lightgray: rgb(212, 212, 212);
+	--gray: rgb(162, 162, 162);
+	--darkgray: rgb(78, 78, 78);
+
 	--hd-height: 50px;
 	--ft-height: 50px;
   }
@@ -35,7 +37,7 @@
 	margin: 0;
 	background-color: var(--whitebg);
 	color: var(--darkfont);
-	background: url("../images/kingkong.gif") no-repeat top right;
+	/*background: url("../images/kingkong.gif") no-repeat top right;*/
   }
 
   a:link {
@@ -174,6 +176,86 @@
 	text-align: center;
   }
 
+/*====================================
+specific styles for diff Pages
+====================================*/
+
+/* Home */
+.home-bg {
+	/*background-image: linear-gradient(45deg, rgba(249, 209, 255, 1), rgba(253, 255, 186, 1)) 
+					, linear-gradient(45deg, rgba(253, 255, 186, 1), rgba(205, 249, 255, 1));*/
+	animation: chg-bg 1s linear 1s infinite alternate;
+	background-size: 100% 65vh;
+	background-repeat: no-repeat;
+	background-position: top;
+}
+@keyframes chg-bg {
+	0%   {background-image: linear-gradient(45deg, rgba(249, 209, 255, 1), rgba(253, 255, 186, 1)) 
+							, linear-gradient(45deg, rgba(253, 255, 186, 0), rgba(205, 249, 255, 0));}
+	10%   {background-image: linear-gradient(45deg, rgba(249, 209, 255, 0.9), rgba(253, 255, 186, 0.9)) 
+							, linear-gradient(45deg, rgba(253, 255, 186, 0.1), rgba(205, 249, 255, 0.1));}
+	20%   {background-image: linear-gradient(45deg, rgba(249, 209, 255, 0.8), rgba(253, 255, 186, 0.8)) 
+							, linear-gradient(45deg, rgba(253, 255, 186, 0.2), rgba(205, 249, 255, 0.2));}
+	30%   {background-image: linear-gradient(45deg, rgba(249, 209, 255, 0.7), rgba(253, 255, 186, 0.7)) 
+							, linear-gradient(45deg, rgba(253, 255, 186, 0.3), rgba(205, 249, 255, 0.3));}
+	40%   {background-image: linear-gradient(45deg, rgba(249, 209, 255, 0.6), rgba(253, 255, 186, 0.6)) 
+							, linear-gradient(45deg, rgba(253, 255, 186, 0.4), rgba(205, 249, 255, 0.4));}
+	50%   {background-image: linear-gradient(45deg, rgba(249, 209, 255, 0.5), rgba(253, 255, 186, 0.5)) 
+							, linear-gradient(45deg, rgba(253, 255, 186, 0.5), rgba(205, 249, 255, 0.5));}
+	60%   {background-image: linear-gradient(45deg, rgba(249, 209, 255, 0.4), rgba(253, 255, 186, 0.4)) 
+							, linear-gradient(45deg, rgba(253, 255, 186, 0.6), rgba(205, 249, 255, 0.6));}
+	70%   {background-image: linear-gradient(45deg, rgba(249, 209, 255, 0.3), rgba(253, 255, 186, 0.3)) 
+							, linear-gradient(45deg, rgba(253, 255, 186, 0.7), rgba(205, 249, 255, 0.7));}
+	80%   {background-image: linear-gradient(45deg, rgba(249, 209, 255, 0.2), rgba(253, 255, 186, 0.2)) 
+							, linear-gradient(45deg, rgba(253, 255, 186, 0.8), rgba(205, 249, 255, 0.8));}
+	90%   {background-image: linear-gradient(45deg, rgba(249, 209, 255, 0.1), rgba(253, 255, 186, 0.1)) 
+							, linear-gradient(45deg, rgba(253, 255, 186, 0.9), rgba(205, 249, 255, 0.9));}
+	100% {background-image: linear-gradient(45deg, rgba(249, 209, 255, 0), rgba(253, 255, 186, 0)) 
+							, linear-gradient(45deg, rgba(253, 255, 186, 1), rgba(205, 249, 255, 1));}
+}
+
+.home-text-container{
+	width: 35vw;
+	margin-left: 5vw;
+	padding: 1rem;
+	color: var(--darkfont);
+}
+.home-text-hdr1 {
+	font-size: 2rem;
+	font-weight: bold;
+	color: var(--darkfont);
+	margin: 1rem 0rem;
+}
+.home-text-normal {
+	font-size: 1.2rem;
+	color: var(--darkfont);
+	margin: 1rem 0rem;
+}
+.home-btn1 {
+	min-width: 20rem;
+	padding: 0.5rem 1rem;
+	margin:2rem 1rem 1rem 0rem;
+	background-color: var(--lightbg);
+}
+.home-btn2, .home-btn2:link, .home-btn2:visited {
+	min-width: 20rem;
+	padding: 0.5rem 1rem;
+	margin:1rem;
+	background-color: var(--darkbg);
+	color: var(--lightfont);
+}
+
+
+.home-img {
+	width: 50vw;
+	height: 60vh;
+	border: 5px solid var(--lightbg);
+	border-radius: 1rem;
+	background-image: url('../images/093434.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	box-shadow: 3px 3px 1rem var(--darkgray);
+}
 
   /* Note List Card Item */
   .note-card-container {
