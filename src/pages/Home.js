@@ -2,8 +2,8 @@
 const Home =  () => {
 
 	return (
-		<div className="row flex-v-middle">
-			<p>Welcome</p>			
+		<div className="row body-section flex-v-middle flex-h-middle">
+			<p>Welcome! @center</p>			
 		</div>
 	);
 

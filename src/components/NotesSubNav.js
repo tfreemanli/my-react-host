@@ -13,7 +13,7 @@ const NotesSubNav = ()=>{
 	}
 
 	return (
-		<div className="side-section">
+		<div className="side-section body-section">
 			<div className="fakeimg"><b>我的笔记</b></div>
 			{allNotes.map((item)=>(
 				//

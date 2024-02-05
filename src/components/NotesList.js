@@ -6,7 +6,7 @@ const NotesList = () => {
 
 	if(!allNotes) {
 		return (
-			<div className="artical-container">
+			<div className="main-section">
 				<p>/ Notes / List /</p>
 				<h3>经过整理归纳的知识才是自己的。</h3>
 				<p>Loading...</p>
@@ -16,7 +16,7 @@ const NotesList = () => {
 	}
 
 	return (
-			<div className="artical-container">
+			<div className="main-section">
 				<p>/ Notes / List /</p>
 				<h3>经过整理归纳的知识才是自己的。</h3>
 				<div className="note-card-container">
