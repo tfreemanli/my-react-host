@@ -1,5 +1,7 @@
+import Todos from './Todos.js';
+
 const Blogs = () => {
-	return <h1>Blog Articles</h1>;
+	return <Todos />;
   };
   
   export default Blogs;

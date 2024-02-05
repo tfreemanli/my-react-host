@@ -1,16 +1,12 @@
-import { createContext, useContext } from "react";
 
-function Component5(contxt) {
-
-	const user = useContext(contxt);
-	//const user = useContext();
+const Home =  () => {
 
 	return (
-	  <>
-		<h1>Component Home</h1>
-		<h2>{`Hello ${user} again!`}</h2>
-	  </>
+		<div className="row flex-v-middle">
+			<p>Welcome</p>			
+		</div>
 	);
-  }
 
-export {Component5};
+}
+
+export default Home;

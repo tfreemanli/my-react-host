@@ -1,0 +1,280 @@
+
+/* 全局范围 root */
+:root {
+	--blackfont: rgb(15,15,15);
+	--darkfont: rgb(36, 36, 36);
+	--lightfont: rgb(228, 226, 215);
+
+	--darkbg:rgb(65, 22, 183);
+	--lightbg:rgb(120, 215, 250);
+	--whitebg:rgb(243, 243, 241);
+
+	--white: rgb(255,255,255);
+	--gray: rgb(162, 162, 162);
+	--lightgray: rgb(212, 212, 212);
+	--hd-height: 50px;
+	--ft-height: 50px;
+  }
+  
+* {
+	box-sizing: border-box;
+	padding: 0;
+  }
+
+  /*
+  =========================================
+  HTML tag
+  =========================================
+  */
+  
+  /* Style the body */
+  body {
+	position: relative;
+	font-family: Tahoma, Verdana, Geneva, sans-serif;
+	font-size: 16px;
+	margin: 0;
+	background-color: var(--whitebg);
+	color: var(--darkfont);
+	background: url("../images/kingkong.gif") no-repeat top right;
+  }
+
+  a:link {
+	text-decoration: none;
+	color:var(--darkfont);
+  }
+  a:visited {
+	text-decoration: none;
+	color:var(--darkfont);
+  }
+  a:hover {
+	text-decoration: underline;
+  }
+
+  p {
+	margin: 1rem 0rem;
+  }
+
+  /*
+  ============================================
+  Custom Class by Layout
+  ============================================
+  */
+  
+  /* Header/logo Title */
+  .header {
+	height: var(--hd-height);
+	padding: 5px;
+	background: var(--darkbg);
+	border-bottom: 1px solid var(--lightbg);
+	overflow: visible;
+  }
+
+  .banner {
+	font-size: 1.5em;
+	color:var(--lightfont);
+  }
+  
+  /* Style the top navigation bar */
+  .navbar {
+	position: absolute;
+	right: 10px;
+  }
+  
+  /* Style the navigation bar links */
+  .navbar a {
+	color: var(--lightfont);
+	padding: 0.5rem 1.5rem;
+	text-decoration: none;
+	text-align: center;
+  }
+  
+  /* Change color on hover */
+  .navbar a:hover {
+	color: var(--darkfontfont);
+	background-color: var(--whitebg);
+	opacity: 0.5;
+	transition: 0.1s;
+  }
+
+  .avatar {
+	display: inline-block;
+	background-color: var(--lightbg);
+	width: 2rem;
+	height: 2rem;
+	line-height: calc(2rem - 4px);
+	border: 2px solid var(--white);
+	border-radius: 1rem;
+	vertical-align: middle;
+	text-align: center;
+	margin: 1rem;
+	color: var(--white);
+	font-weight: bold;
+	font-size: larger;
+	text-transform: uppercase;
+  }
+
+  /* Layout */
+  .main-section {
+	min-height: calc(100vh - var(--hd-height) - var(--ft-height));
+  }
+  
+  /* Column container */
+  .row {  
+	display: flex;
+	flex-wrap: wrap;
+  }
+  
+  /* Create two unequal columns that sits next to each other */
+  /* Sidebar/left column */
+  .side-section {
+	flex: 25%;
+	background-color: var(--whitebg);
+	padding: 1rem;
+  }
+  
+  /* Main column */
+  .main-section {
+	flex: 75%;
+	padding: 1rem;
+  }
+  
+  /* Fake image, just for this example */
+  .fakeimg {
+	background-color: var(--lightfont);
+	width: 100%;
+	padding: 1rem;
+	border-radius: 0.5rem;
+	border-top-left-radius: 1rem ;
+	border-bottom-right-radius: 1rem;
+  }
+
+  .artical-image-container {
+	max-width: 100%;
+	padding: 2rem;
+	object-fit: cover;
+  }
+
+  .artical-container {
+	max-width: 75%;
+	padding: 2rem;
+  }
+
+  .minor-text {
+	color: var(--gray);
+	font-size: 0.8rem;
+  }
+  
+  /* Footer */
+  .footer {
+	height: var(--ft-height);
+	padding: 1rem;
+	background: var(--darkbg);
+	color: var(--lightfont);
+	border-top: 3px solid var(--lightbg);
+	text-align: center;
+  }
+
+
+
+  /* Note List Card Item */
+  .note-card-container {
+	display: flex;
+	flex-wrap: wrap;
+  }
+  .noteitemcard {
+	flex: 25%;
+	min-width: 200px;
+	max-width: 300px;
+	border: 1px solid var(--darkfont);
+	border-radius: 0.5rem 0.5rem 0.3rem 0.3rem;
+	background: var(--white);
+	opacity: 0.7;
+	margin: 0.5rem;
+	padding: 0rem;
+  }
+
+  .noteitemcard a:link {
+	text-decoration: none;
+  }
+
+  .noteitemcard:hover {
+	text-decoration: none;
+	transform: scale(1.03, 1.03);
+	opacity: 0.8;
+	box-shadow : 0px 0px 5px var(--gray);
+	transition: 0.1s;
+  }
+
+  .noteitemcard:hover .card-title {
+	text-decoration: none;
+	background-color: var(--darkbg);
+	border-bottom: 2px solid var(--darkbg);
+	border-radius: 0.5rem 0.5rem 0 0;
+	color: var(--lightfont);
+	transition: 0.1s;
+  }
+
+  .noteitemcard:active {
+	transform: scale(1, 1);
+	background-color: none;
+	box-shadow : none;
+  }
+
+  .card-title {
+	border-bottom: 2px solid var(--lightgray);
+	padding: 0.5rem; 
+	font-weight: bold;
+  }
+
+  .card-data {
+	padding: 0 1rem;
+	max-height: 250px;
+	overflow:hidden;
+  }
+
+
+
+  /* 
+  ==================================================
+  common shared class definition
+  ==================================================
+  */
+  
+  .flex-v-middle {
+	display: flex;
+	align-content: center;
+	align-items:center;
+  }
+  .flex-h-middle {
+	display: flex;
+	justify-content: center;
+  }
+
+  .col-three {
+	column-count: 3;
+  }
+  .col-four {
+	column-count: 4;
+  }
+  
+  /* 
+  ===================================================
+  Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other
+  =================================================== 
+  */
+  @media screen and (max-width: 600px) {
+	.row  {   
+	  flex-direction: column-reverse;
+	}
+	.note {
+		display: none;
+	}
+	
+	.header {
+		position: relative;
+	}
+	.navbar {
+		position: sticky;
+		top: 0px;
+	}
+  }

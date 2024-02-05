@@ -947,8 +947,8 @@ CSS对象名使用驼峰命名；
 > import 'xxxxx.css'
 
 使用时  
-> \<h1 className={styles.myColor}> Text </h1>
-> \<h1 className=“myColor”> Text </h1>
+> \<h1 className={styles.myColor}> Text \</h1>  
+> \<h1 className=“myColor”> Text \</h1>
 
 ## 4.6 Sass
 Sass是需要预处理的CSS，为CSS提供变量和逻辑判断，提前运行生成真正的css之后再把css发给浏览器。
@@ -1179,6 +1179,7 @@ import { useState, createContext, useContext } from "react";
 function Component5() {
   const user = useContext(UserContext);
   //UserContext 是同一个文件中的组件之外的变量，所以这里可以访问
+  //useContext()返回的是value里面的变量（value一般都是用来放state的），而不是Context本身或者Provider
 
   return (
     <>
