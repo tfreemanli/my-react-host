@@ -2,7 +2,7 @@ import NavBar from "../components/NavBar";
 
 const Header = ()=>{
 	return (
-		<div className="header flex-v-middle">
+		<div className="header">
 			<div className="banner">
 				My Knowledge Base
 			</div>

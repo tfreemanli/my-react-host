@@ -64,6 +64,9 @@
   
   /* Header/logo Title */
   .header {
+	display: flex;
+	justify-content: space-between;
+	align-items:center;
 	height: var(--hd-height);
 	padding: 5px;
 	background: var(--darkbg);
@@ -72,20 +75,42 @@
   }
 
   .banner {
+	max-width: 220px;
 	font-size: 1.5em;
 	color:var(--lightfont);
+	/*border:1px solid greenyellow;*/
   }
   
   /* Style the top navigation bar */
   .navbar {
+	width: 520px;
+	/*
 	position: absolute;
-	right: 10px;
+	right: 0;
+	border:1px solid greenyellow;
+	*/
+	text-align: right;
+  }
+  
+  /* Style the small screen navigation bar */
+  .navbar-col
+  , .navbar-col-items {
+	display: none;
+  }
+  
+  .navbar-col-menu {
+	display: none;
+	width: 2rem;
+	height: 2rem;
+	background-image: url('../images/menu.svg');
+	background-repeat: no-repeat;
+	background-size: cover;
   }
   
   /* Style the navigation bar links */
   .navbar a {
 	color: var(--lightfont);
-	padding: 0.5rem 1.5rem;
+	padding: 0.5rem 1rem;
 	text-decoration: none;
 	text-align: center;
   }
@@ -94,7 +119,7 @@
   .navbar a:hover {
 	color: var(--darkfontfont);
 	background-color: var(--whitebg);
-	opacity: 0.5;
+	opacity: 0.6;
 	transition: 0.1s;
   }
 
@@ -108,7 +133,7 @@
 	border-radius: 1rem;
 	vertical-align: middle;
 	text-align: center;
-	margin: 1rem;
+	margin: 0rem;
 	color: var(--white);
 	font-weight: bold;
 	font-size: larger;
@@ -167,13 +192,17 @@
   }
   
   /* Footer */
-  .footer, .footer a {
-	height: var(--ft-height);
+  .footer {
+	min-height: var(--ft-height);
 	padding: 0.5rem 1rem;
 	background: var(--darkbg);
 	color: var(--lightfont);
 	border-top: 3px solid var(--lightbg);
 	text-align: center;
+  }
+  .footer a{
+	color: var(--lightfont);
+	padding: 0.5rem 1rem;
   }
 
 /*====================================
@@ -182,10 +211,11 @@ specific styles for diff Pages
 
 /* Home */
 .home-bg {
-	/*background-image: linear-gradient(45deg, rgba(249, 209, 255, 1), rgba(253, 255, 186, 1)) 
-					, linear-gradient(45deg, rgba(253, 255, 186, 1), rgba(205, 249, 255, 1));*/
+	/*background-image: linear-gradient(45deg, rgba(249, 209, 255), rgba(253, 255, 186)) 
+					, linear-gradient(45deg, rgba(253, 255, 186), rgba(205, 249, 255));
+	opacity: 0.5;*/
 	animation: chg-bg 1s linear 1s infinite alternate;
-	background-size: 100% 65vh;
+	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	background-position: top;
 }
@@ -215,7 +245,8 @@ specific styles for diff Pages
 }
 
 .home-text-container{
-	width: 35vw;
+	max-width: 35vw;
+	min-width: 320px;
 	margin-left: 5vw;
 	padding: 1rem;
 	color: var(--darkfont);
@@ -249,6 +280,7 @@ specific styles for diff Pages
 .home-img {
 	width: 50vw;
 	height: 60vh;
+	margin-top: 1rem;
 	border: 5px solid var(--lightbg);
 	border-radius: 1rem;
 	background-image: url('../images/093434.jpg');
@@ -281,7 +313,6 @@ specific styles for diff Pages
   .noteitemcard:hover {
 	text-decoration: none;
 	transform: scale(1.03, 1.03);
-	opacity: 0.8;
 	box-shadow : 0px 0px 5px var(--gray);
 	transition: 0.1s;
   }
@@ -331,11 +362,14 @@ specific styles for diff Pages
 	justify-content: center;
   }
 
-  .col-three {
-	column-count: 3;
+  .hideMe {
+	display: none;
   }
-  .col-four {
-	column-count: 4;
+  .showMeBox {
+	display: block;
+  }
+  .showMeInline {
+	display: inline;
   }
   
   /* 
@@ -343,7 +377,7 @@ specific styles for diff Pages
   Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other
   =================================================== 
   */
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 750px) {
 	.row  {   
 	  flex-direction: column-reverse;
 	}
@@ -352,10 +386,47 @@ specific styles for diff Pages
 	}
 	
 	.header {
-		position: relative;
+		flex-direction: column;
+		align-items: flex-start;
+		height: auto;
 	}
+	
+    /* Style the top navigation bar */
 	.navbar {
-		position: sticky;
-		top: 0px;
+		display: block;
+		width: 100%;
+	}
+	.navbar a {
+	  padding: 0.5rem 0.5rem;
+	}
+
+	/* Style the small screen navigation bar */
+	.navbar-col {
+		display: none;
+		flex-direction: column;
+		background-color: var(--darkbg);
+		overflow: visible;
+		/*
+		小屏幕时主菜单字体左右对齐
+		align-items:center/flex-start/flex-end;
+		*/
+	}
+	.navbar-col-menu{
+		display: block;
+	}
+	.navbar-col-items{
+		display: flex;
+		flex-direction: column;
+		background-color: var(--darkbg);
+		position: relative;
+		top: 1rem;
+	}
+
+
+	.home-text-container
+	,.home-img{
+		width: 90%;
+		max-width: none;
+		min-width: none;
 	}
   }
