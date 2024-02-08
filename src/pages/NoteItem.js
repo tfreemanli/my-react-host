@@ -48,7 +48,7 @@ const NoteItem = ()=>{
 			<NotesSubNav />
 			<div className="main-section">
 					<div>
-						<h2>{title}</h2>
+						<h3>{title}</h3>
 						<p className="minor-text">Auth:{author} Pub date:{dtUpdate}</p>
 						<hr/>
 						<RichText {...note}/>

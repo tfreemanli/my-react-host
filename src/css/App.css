@@ -53,7 +53,7 @@
   }
 
   p {
-	margin: 1rem 0rem;
+	margin: 0.5rem 0rem;
   }
 
   /*
@@ -169,7 +169,7 @@
   .fakeimg {
 	background-color: var(--lightfont);
 	width: 100%;
-	padding: 1rem;
+	padding: 0.5rem;
 	border-radius: 0.5rem;
 	border-top-left-radius: 1rem ;
 	border-bottom-right-radius: 1rem;
@@ -183,7 +183,7 @@
 
   .artical-container {
 	max-width: 75%;
-	padding: 2rem;
+	padding: 1rem;
   }
 
   .minor-text {
@@ -429,4 +429,11 @@ specific styles for diff Pages
 		max-width: none;
 		min-width: none;
 	}
-  }
+
+	
+	.artical-container {
+		max-width: 100%;
+		/*border: 1px solid green;*/
+	}
+
+  } /* end of @media*/
